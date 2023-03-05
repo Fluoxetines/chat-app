@@ -15,7 +15,6 @@ const http = require("http");
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
-const { promisify } = require("util");
 const User = require("./models/UserModel");
 const FriendRequest = require("./models/FriendRequestModel");
 const Message = require("./models/MessageModel");
@@ -50,7 +49,7 @@ io.on("connection", async (socket) => {
     });
   }
 
-  socket.on("friend_request", async (date) => {
+  socket.on("friend_request", async (data) => {
     const to = await User.findById(data.to).select("socket_id");
     const from = await User.findById(data.from).select("socket_id");
 
@@ -58,12 +57,11 @@ io.on("connection", async (socket) => {
       sender: data.from,
       recipient: data.to,
     });
-
     io.to(to.socket_id).emit("new_friend_request", {
       message: "New friend request received",
     });
     io.to(from.socket_id).emit("request_sent", {
-      message: "Request Sent successfully !",
+      message: "Request Sent successfully!",
     });
   });
 
@@ -90,5 +88,72 @@ io.on("connection", async (socket) => {
     io.to(receiver.socket_id).emit("request_accepted", {
       message: "Friend Request Accepted",
     });
+  });
+
+  socket.on("get_direct_conversations", async ({ user_id }, callback) => {
+    const existing_conversations = await Message.find({
+      participants: { $all: [user_id] },
+    }).populate("participants", "firstName lastName _id email status");
+
+    console.log(existing_conversations);
+
+    callback(existing_conversations);
+  });
+
+  socket.on("start_conversation", async (data) => {
+    const { to, from } = data;
+
+    const existing_conversations = await Message.find({
+      participants: { $size: 2, $all: [to, from] },
+    }).populate("participants", "firstName lastName _id email status");
+
+    console.log(existing_conversations[0], "Existing Conversation");
+
+    if (existing_conversations.length === 0) {
+      let new_chat = await Message.create({
+        participants: [to, from],
+      });
+
+      new_chat = await Message.findById(new_chat).populate(
+        "participants",
+        "firstName lastName _id email status"
+      );
+
+      console.log(new_chat);
+      socket.emit("start_chat", new_chat);
+    } else {
+      socket.emit("open_chat", existing_conversations[0]);
+    }
+  });
+
+  socket.on("text_message", (data) => {
+    console.log("Received message:", data);
+  });
+
+  socket.on("file_message", (data) => {
+    console.log("Received message:", data);
+
+    const fileExtension = path.extname(data.file.name);
+
+    const filename = `${Date.now()}_${Math.floor(
+      Math.random() * 10000
+    )}${fileExtension}`;
+  });
+
+  socket.on("end", async (data) => {
+    if (data.user_id) {
+      await User.findByIdAndUpdate(data.user_id, { status: "Offline" });
+    }
+
+    console.log("closing connection");
+    socket.disconnect(0);
+  });
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+  console.log("UNHANDLED REJECTION! Shutting down ...");
+  server.close(() => {
+    process.exit(1);
   });
 });
