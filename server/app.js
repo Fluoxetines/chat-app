@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 
-const routes = require("./routes/index");
+/* const routes = require("./routes/index"); */
 
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
@@ -17,8 +17,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("cookie-session");
 
-const authRouter = require("./routes/auth");
-const userRouter = require("./routes/user");
+/* const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user"); */
 
 const app = express();
 
@@ -61,6 +61,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongosanitize());
 
 app.use(xss());
-app.use(routes);
+/* app.use(routes); */
 
 module.exports = app;
