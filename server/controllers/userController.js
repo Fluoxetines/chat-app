@@ -39,7 +39,7 @@ exports.getUsers = async (req, res, next) => {
   });
 };
 
-exports.getRequest = async (req, res, next) => {
+exports.getRequests = async (req, res, next) => {
   const request = await FriendRequest.find({ recipient: req.user._id })
     .populate("sender")
     .select("_id firstName lastName");
