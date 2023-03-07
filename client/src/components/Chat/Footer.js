@@ -156,7 +156,7 @@ function containsUrl(text) {
 const Footer = () => {
   const theme = useTheme();
 
-  const { current_coversation } = useSelector(
+  const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
 
@@ -188,7 +188,84 @@ const Footer = () => {
     }
   }
 
-  return <div>Footer</div>;
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        backgroundColor: "transparent !important",
+      }}
+    >
+      <Box
+        p={isMobile ? 1 : 2}
+        width={"100%"}
+        sx={{
+          backgroundColor:
+            theme.palette.mode === "light"
+              ? "#F8FAFF"
+              : theme.palette.background,
+          boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+        }}
+      >
+        <Stack direction="row" alignItems={"center"} spacing={isMobile ? 1 : 3}>
+          <Stack sx={{ width: "100%" }}>
+            <Box
+              style={{
+                zIndex: 10,
+                position: "fixed",
+                display: openPicker ? "inline" : "none",
+                bottom: 81,
+                right: isMobile ? 20 : sideBar.open ? 420 : 100,
+              }}
+            >
+              <Picker
+                theme={theme.palette.mode}
+                data={data}
+                onEmojiSelect={(emoji) => {
+                  handleEmojiClick(emoji.native);
+                }}
+              />
+            </Box>
+            {/* Chat Input */}
+            <ChatInput
+              inputRef={inputRef}
+              value={value}
+              setValue={setValue}
+              openPicker={openPicker}
+              setOpenPicker={setOpenPicker}
+            />
+          </Stack>
+          <Box
+            sx={{
+              height: 48,
+              width: 48,
+              backgroundColor: theme.palette.primary.main,
+              borderRadius: 1.5,
+            }}
+          >
+            <Stack
+              sx={{ height: "100%" }}
+              alignItems={"center"}
+              justifyContent="center"
+            >
+              <IconButton
+                onClick={() => {
+                  socket.emit("text_message", {
+                    message: linkify(value),
+                    conversation_id: room_id,
+                    from: user_id,
+                    to: current_conversation.user_id,
+                    type: containsUrl(value) ? "Link" : "Text",
+                  });
+                }}
+              >
+                <PaperPlaneTilt color="#ffffff" />
+              </IconButton>
+            </Stack>
+          </Box>
+        </Stack>
+      </Box>
+    </Box>
+  );
 };
 
 export default Footer;
