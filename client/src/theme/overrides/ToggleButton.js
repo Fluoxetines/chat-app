@@ -1,4 +1,4 @@
-import { alpha } from "@mui/material/styles";
+import { alpha } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -6,14 +6,11 @@ export default function ToggleButton(theme) {
   const style = (color) => ({
     props: { color },
     style: {
-      "&:hover": {
+      '&:hover': {
         borderColor: alpha(theme.palette[color].main, 0.48),
-        backgroundColor: alpha(
-          theme.palette[color].main,
-          theme.palette.action.hoverOpacity
-        ),
+        backgroundColor: alpha(theme.palette[color].main, theme.palette.action.hoverOpacity),
       },
-      "&.Mui-selected": {
+      '&.Mui-selected': {
         borderColor: alpha(theme.palette[color].main, 0.48),
       },
     },
@@ -23,19 +20,19 @@ export default function ToggleButton(theme) {
     MuiToggleButton: {
       variants: [
         {
-          props: { color: "standard" },
+          props: { color: 'standard' },
           style: {
-            "&.Mui-selected": {
+            '&.Mui-selected': {
               backgroundColor: theme.palette.action.selected,
             },
           },
         },
-        style("primary"),
-        style("secondary"),
-        style("info"),
-        style("success"),
-        style("warning"),
-        style("error"),
+        style('primary'),
+        style('secondary'),
+        style('info'),
+        style('success'),
+        style('warning'),
+        style('error'),
       ],
     },
     MuiToggleButtonGroup: {
@@ -44,9 +41,9 @@ export default function ToggleButton(theme) {
           borderRadius: theme.shape.borderRadius,
           backgroundColor: theme.palette.background.paper,
           border: `solid 1px ${theme.palette.grey[500_12]}`,
-          "& .MuiToggleButton-root": {
+          '& .MuiToggleButton-root': {
             margin: 4,
-            borderColor: "transparent !important",
+            borderColor: 'transparent !important',
             borderRadius: `${theme.shape.borderRadius}px !important`,
           },
         },

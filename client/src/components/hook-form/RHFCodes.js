@@ -1,7 +1,10 @@
-import { useRef } from "react";
-import { useFormContext, Controller } from "react-hook-form";
 
+import { useRef } from "react";
+// form
+import { useFormContext, Controller } from "react-hook-form";
+// @mui
 import { Stack, TextField } from "@mui/material";
+
 
 export default function RHFCodes({ keyName = "", inputs = [], ...other }) {
   const codesRef = useRef(null);
@@ -15,7 +18,7 @@ export default function RHFCodes({ keyName = "", inputs = [], ...other }) {
 
     const fieldIntIndex = Number(fieldIndex);
 
-    const nextField = document.querySelector(
+    const nextfield = document.querySelector(
       `input[name=${keyName}${fieldIntIndex + 1}]`
     );
 
@@ -23,8 +26,8 @@ export default function RHFCodes({ keyName = "", inputs = [], ...other }) {
       event.target.value = value[0];
     }
 
-    if (value.length >= maxLength && fieldIntIndex < 6 && nextField !== null) {
-      nextField.focus();
+    if (value.length >= maxLength && fieldIntIndex < 6 && nextfield !== null) {
+      nextfield.focus();
     }
 
     handleChange(event);

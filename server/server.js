@@ -1,13 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
-
-process.on("uncaughtException", (err) => {
-  console.log(err);
-  console.log(" UNCAUGHT Exception! Shutting down ...");
-  process.exit(1);
-});
+dotenv.config();
 
 const app = require("./app");
 
@@ -15,25 +9,25 @@ const http = require("http");
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
-const User = require("./models/UserModel");
-const FriendRequest = require("./models/FriendRequestModel");
-const Message = require("./models/MessageModel");
+const User = require("./models/user");
+const FriendRequest = require("./models/friendRequest");
+const OneToOneMessage = require("./models/OneToOneMessage");
 
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    method: ["GET", "POST"],
+    methods: ["GET", "POST"],
   },
 });
 
-mongoose.connect(process.env.MONGODB_URL).then((x) => {
-  console.log("DB Connection successfully !");
+mongoose.connect(process.env.MONGODB_URL, {}).then((con) => {
+  console.log("DB Connection successful");
 });
 
 const port = process.env.PORT || 8000;
 
 server.listen(port, () => {
-  console.log(`Server running on port ${port} ...`);
+  console.log(`App running on port ${port} ...`);
 });
 
 io.on("connection", async (socket) => {
@@ -91,9 +85,9 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("get_direct_conversations", async ({ user_id }, callback) => {
-    const existing_conversations = await Message.find({
+    const existing_conversations = await OneToOneMessage.find({
       participants: { $all: [user_id] },
-    }).populate("participants", "firstName lastName _id email status");
+    }).populate("participants", "name _id email status");
 
     console.log(existing_conversations);
 
@@ -103,31 +97,66 @@ io.on("connection", async (socket) => {
   socket.on("start_conversation", async (data) => {
     const { to, from } = data;
 
-    const existing_conversations = await Message.find({
+    const existing_conversations = await OneToOneMessage.find({
       participants: { $size: 2, $all: [to, from] },
-    }).populate("participants", "firstName lastName _id email status");
+    }).populate("participants", "name _id email status");
 
     console.log(existing_conversations[0], "Existing Conversation");
 
     if (existing_conversations.length === 0) {
-      let new_chat = await Message.create({
+      let new_chat = await OneToOneMessage.create({
         participants: [to, from],
       });
 
-      new_chat = await Message.findById(new_chat).populate(
+      new_chat = await OneToOneMessage.findById(new_chat).populate(
         "participants",
-        "firstName lastName _id email status"
+        "name _id email status"
       );
 
       console.log(new_chat);
+
       socket.emit("start_chat", new_chat);
     } else {
       socket.emit("open_chat", existing_conversations[0]);
     }
   });
 
-  socket.on("text_message", (data) => {
+  socket.on("get_messages", async (data, callback) => {
+    const { messages } = await OneToOneMessage.findById(
+      data.conversation_id
+    ).select("messages");
+    callback(messages);
+  });
+
+  socket.on("text_message", async (data) => {
     console.log("Received message:", data);
+
+    const { message, conversation_id, from, to, type } = data;
+
+    const to_user = await User.findById(to);
+    const from_user = await User.findById(from);
+
+    const new_message = {
+      to: to,
+      from: from,
+      type: type,
+      created_at: Date.now(),
+      text: message,
+    };
+
+    const chat = await OneToOneMessage.findById(conversation_id);
+    chat.messages.push(new_message);
+    await chat.save({ new: true, validateModifiedOnly: true });
+
+    io.to(to_user.socket_id).emit("new_message", {
+      conversation_id,
+      message: new_message,
+    });
+
+    io.to(from_user.socket_id).emit("new_message", {
+      conversation_id,
+      message: new_message,
+    });
   });
 
   socket.on("file_message", (data) => {
@@ -147,13 +176,5 @@ io.on("connection", async (socket) => {
 
     console.log("closing connection");
     socket.disconnect(0);
-  });
-});
-
-process.on("unhandledRejection", (err) => {
-  console.log(err);
-  console.log("UNHANDLED REJECTION! Shutting down ...");
-  server.close(() => {
-    process.exit(1);
   });
 });

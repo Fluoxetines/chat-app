@@ -1,13 +1,18 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+// form
+import { useFormContext, Controller } from 'react-hook-form';
+// @mui
+import { FormHelperText } from '@mui/material';
+//
+import { UploadAvatar } from '../upload';
 
-import { useFormContext, Controller } from "react-hook-form";
-
-import { FormHelperText } from "@mui/material";
-import { UploadAvatar } from "../upload";
+// ----------------------------------------------------------------------
 
 RHFUploadAvatar.propTypes = {
   name: PropTypes.string,
 };
+
+// ----------------------------------------------------------------------
 
 export function RHFUploadAvatar({ name, ...other }) {
   const { control } = useFormContext();
@@ -20,7 +25,7 @@ export function RHFUploadAvatar({ name, ...other }) {
         <div>
           <UploadAvatar
             accept={{
-              "image/*": [],
+              'image/*': [],
             }}
             error={!!error}
             file={field.value}
@@ -28,7 +33,7 @@ export function RHFUploadAvatar({ name, ...other }) {
           />
 
           {!!error && (
-            <FormHelperText error sx={{ px: 2, textAlign: "center" }}>
+            <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
               {error.message}
             </FormHelperText>
           )}
@@ -37,3 +42,4 @@ export function RHFUploadAvatar({ name, ...other }) {
     />
   );
 }
+

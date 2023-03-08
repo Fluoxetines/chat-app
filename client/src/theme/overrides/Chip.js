@@ -1,4 +1,6 @@
-import { CloseIcon } from "./CustomIcon";
+import { CloseIcon } from './CustomIcons';
+
+// ----------------------------------------------------------------------
 
 export default function Chip(theme) {
   return {
@@ -9,20 +11,20 @@ export default function Chip(theme) {
 
       styleOverrides: {
         colorDefault: {
-          "& .MuiChip-avatarMedium, .MuiChip-avatarSmall": {
+          '& .MuiChip-avatarMedium, .MuiChip-avatarSmall': {
             color: theme.palette.text.secondary,
           },
         },
         outlined: {
           borderColor: theme.palette.grey[500_32],
-          "&.MuiChip-colorPrimary": {
+          '&.MuiChip-colorPrimary': {
             borderColor: theme.palette.primary.main,
           },
-          "&.MuiChip-colorSecondary": {
+          '&.MuiChip-colorSecondary': {
             borderColor: theme.palette.secondary.main,
           },
         },
-
+        //
         avatarColorInfo: {
           color: theme.palette.info.contrastText,
           backgroundColor: theme.palette.info.dark,

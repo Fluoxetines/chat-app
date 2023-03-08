@@ -1,3 +1,4 @@
+// theme
 import palette from "../theme/palette";
 
 export const colorPresets = [

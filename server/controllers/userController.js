@@ -1,28 +1,22 @@
-const FriendRequest = require("../models/FriendRequestModel");
-const User = require("../models/UserModel");
-const filterObj = require("../utils/filterObj");
+const FriendRequest = require("../models/friendRequest");
+const User = require("../models/user");
 
 exports.updateMe = async (req, res, next) => {
-  const filterBody = filterObj(
-    req.body,
-    "firstName",
-    "lastName",
-    "about",
-    "avatar"
-  );
+  const { name, about, avatar } = req.body;
 
-  const userDoc = await User.findByIdAndUpdate(req.user._id, filterBody);
+  const userDoc = await User.findByIdAndUpdate(req.user._id);
+
   res.status(200).json({
     status: "success",
     data: userDoc,
-    message: "User updated successfully",
+    message: "User Updated successfully",
   });
 };
 
 exports.getUsers = async (req, res, next) => {
-  const all_users = await User.find({ verified: true }).select(
-    "firstName lastName _id"
-  );
+  const all_users = await User.find({
+    verified: true,
+  }).select("name _id");
 
   const this_user = req.user;
 
@@ -35,30 +29,30 @@ exports.getUsers = async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: remaining_users,
-    message: "User found successfully !",
+    message: "Users found successfully!",
   });
 };
 
 exports.getRequests = async (req, res, next) => {
-  const request = await FriendRequest.find({ recipient: req.user._id })
+  const requests = await FriendRequest.find({ recipient: req.user._id })
     .populate("sender")
-    .select("_id firstName lastName");
+    .select("_id name");
 
   res.status(200).json({
     status: "success",
-    data: request,
-    message: "Requests found successfully !",
+    data: requests,
+    message: "Requests found successfully!",
   });
 };
 
 exports.getFriends = async (req, res, next) => {
   const this_user = await User.findById(req.user._id).populate(
     "friends",
-    "_id firstName lastName"
+    "_id name"
   );
   res.status(200).json({
     status: "success",
     data: this_user.friends,
-    message: "Friends found successfully !",
+    message: "Friends found successfully!",
   });
 };

@@ -1,25 +1,19 @@
 import { useState } from "react";
 import * as Yup from "yup";
 import { Link as RouterLink } from "react-router-dom";
-
+// form
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import {
-  Link,
-  Stack,
-  Alert,
-  IconButton,
-  InputAdorment,
-  InputAdornment,
-} from "@mui/material";
+// @mui
+import { Link, Stack, Alert, IconButton, InputAdornment } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-
-import FormProVider, { RHFTextField } from "../../components/hook-form";
+// components
+import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
 import { LoginUser } from "../../redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { positions } from "@mui/system";
+
+// ----------------------------------------------------------------------
 
 export default function AuthLoginForm() {
   const dispatch = useDispatch();
@@ -35,7 +29,7 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: "demo@gmail.com",
+    email: "demo@tawk.com",
     password: "demo1234",
   };
 
@@ -66,11 +60,12 @@ export default function AuthLoginForm() {
   };
 
   return (
-    <FormProVider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && (
           <Alert severity="error">{errors.afterSubmit.message}</Alert>
         )}
+
         <RHFTextField name="email" label="Email address" />
 
         <RHFTextField
@@ -79,7 +74,7 @@ export default function AuthLoginForm() {
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <InputAdornment positions="end">
+              <InputAdornment position="end">
                 <IconButton
                   onClick={() => setShowPassword(!showPassword)}
                   edge="end"
@@ -124,6 +119,6 @@ export default function AuthLoginForm() {
       >
         Login
       </LoadingButton>
-    </FormProVider>
+    </FormProvider>
   );
 }

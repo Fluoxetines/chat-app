@@ -1,7 +1,8 @@
 import React from "react";
 
 const Page404 = () => {
-  return <div>Page404</div>;
+  return <>404</>;
 };
+
 
 export default Page404;

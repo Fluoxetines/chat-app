@@ -1,8 +1,10 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+// form
+import { FormProvider as Form } from 'react-hook-form';
 
-import { FormProvider as Form } from "react-hook-form";
+// ----------------------------------------------------------------------
 
-FormProvider.prototype = {
+FormProvider.propTypes = {
   children: PropTypes.node,
   methods: PropTypes.object,
   onSubmit: PropTypes.func,

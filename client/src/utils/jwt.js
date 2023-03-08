@@ -1,7 +1,5 @@
 import jwtDecode from "jwt-decode";
-
 import { PATH_AUTH } from "../routes/paths";
-
 import axios from "./axios";
 
 const isValidToken = (accessToken) => {

@@ -1,5 +1,8 @@
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+// @mui
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+// ----------------------------------------------------------------------
 
 export default function useResponsive(query, key, start, end) {
   const theme = useTheme();
@@ -12,21 +15,20 @@ export default function useResponsive(query, key, start, end) {
 
   const mediaOnly = useMediaQuery(theme.breakpoints.only(key));
 
-  if (query === "up") {
+  if (query === 'up') {
     return mediaUp;
   }
 
-  if (query === " down") {
+  if (query === 'down') {
     return mediaDown;
   }
 
-  if (query === "between") {
+  if (query === 'between') {
     return mediaBetween;
   }
 
-  if (query === "mediaOnly") {
+  if (query === 'only') {
     return mediaOnly;
   }
-
   return null;
 }

@@ -12,7 +12,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import { CaretDown, MagnifyingGlass, Phone, VideoCamera } from "phosphor-react";
 import { faker } from "@faker-js/faker";
@@ -40,7 +39,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
   "@keyframes ripple": {
     "0%": {
-      transform: "scale(0.8)",
+      transform: "scale(.8)",
       opacity: 1,
     },
     "100%": {
@@ -69,6 +68,7 @@ const ChatHeader = () => {
   const dispatch = useDispatch();
   const isMobile = useResponsive("between", "md", "xs", "sm");
   const theme = useTheme();
+
   const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
     React.useState(null);
   const openConversationMenu = Boolean(conversationMenuAnchorEl);
@@ -78,14 +78,15 @@ const ChatHeader = () => {
   const handleCloseConversationMenu = () => {
     setConversationMenuAnchorEl(null);
   };
+
   return (
     <Box
       p={2}
       width={"100%"}
       sx={{
         backgroundColor:
-          theme.palette.mode === "light" ? "#f8faff" : theme.palette.background,
-        boxShadow: "0 0 2px rgba (0,0,0,0.25)",
+          theme.palette.mode === "light" ? "#F8FAFF" : theme.palette.background,
+        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
       }}
     >
       <Stack
@@ -104,7 +105,10 @@ const ChatHeader = () => {
           <Box>
             <StyledBadge
               overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
               variant="dot"
             >
               <Avatar alt={faker.name.fullName()} src={faker.image.avatar()} />
@@ -164,15 +168,13 @@ const ChatHeader = () => {
                 {Conversation_Menu.map((el) => (
                   <MenuItem onClick={handleCloseConversationMenu}>
                     <Stack
-                      sx={{
-                        minwidth: 100,
-                      }}
+                      sx={{ minWidth: 100 }}
                       direction="row"
                       alignItems={"center"}
                       justifyContent="space-between"
                     >
                       <span>{el.title}</span>
-                    </Stack>
+                    </Stack>{" "}
                   </MenuItem>
                 ))}
               </Stack>

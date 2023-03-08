@@ -1,12 +1,15 @@
+// ----------------------------------------------------------------------
+
 export default function Timeline(theme) {
   return {
     MuiTimelineDot: {
       styleOverrides: {
         root: {
-          boxShadow: "none",
+          boxShadow: 'none',
         },
       },
     },
+
     MuiTimelineConnector: {
       styleOverrides: {
         root: {

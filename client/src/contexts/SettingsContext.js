@@ -1,5 +1,5 @@
+// provider === component
 import { createContext, useEffect } from "react";
-
 import { defaultSettings } from "../config";
 import useLocalStorage from "../hooks/useLocalStorage";
 import getColorPresets, {
@@ -23,7 +23,7 @@ const initialState = {
   onToggleLayout: () => {},
   onChangeLayout: () => {},
 
-  //Contrast
+  // Contrast
   onToggleContrast: () => {},
   onChangeContrast: () => {},
 
@@ -51,13 +51,14 @@ const SettingsProvider = ({ children }) => {
     themeColorPresets: initialState.themeColorPresets,
   });
 
-  const isVN = localStorage.getItem("i18nextLng") === "vn";
+  const isArabic = localStorage.getItem("i18nextLng") === "ar";
 
   useEffect(() => {
-    if (isVN) {
-      onChangeDirectionByLang("vn");
+    if (isArabic) {
+      onChangeDirectionByLang("ar");
     }
-  }, [isVN]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isArabic]);
 
   // Mode
 
@@ -69,7 +70,10 @@ const SettingsProvider = ({ children }) => {
   };
 
   const onChangeMode = (event) => {
-    setSettings({ ...settings, themeMode: event.target.value });
+    setSettings({
+      ...settings,
+      themeMode: event.target.value,
+    });
   };
 
   // Direction
@@ -82,11 +86,17 @@ const SettingsProvider = ({ children }) => {
   };
 
   const onChangeDirection = (event) => {
-    setSettings({ ...settings, themeDirection: event.target.value });
+    setSettings({
+      ...settings,
+      themeDirection: event.target.value,
+    });
   };
 
   const onChangeDirectionByLang = (lang) => {
-    setSettings({ ...settings, themeDirection: lang === "vn" ? "rtl" : "ltr" });
+    setSettings({
+      ...settings,
+      themeDirection: lang === "ar" ? "rtl" : "ltr",
+    });
   };
 
   // Layout
@@ -179,7 +189,7 @@ const SettingsProvider = ({ children }) => {
         // Color
         onChangeColor,
         setColor: getColorPresets(settings.themeColorPresets),
-        colorOptions: colorPresets.map((color) => ({
+        colorOption: colorPresets.map((color) => ({
           name: color.name,
           value: color.main,
         })),
@@ -193,6 +203,6 @@ const SettingsProvider = ({ children }) => {
   );
 };
 
-export { SettingsContext };
+export {SettingsContext};
 
 export default SettingsProvider;

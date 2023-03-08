@@ -1,4 +1,3 @@
-import React, { useRef, useState } from "react";
 import {
   Box,
   Fab,
@@ -19,7 +18,9 @@ import {
   User,
 } from "phosphor-react";
 import { useTheme, styled } from "@mui/material/styles";
+import React, { useRef, useState } from "react";
 import useResponsive from "../../hooks/useResponsive";
+
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { socket } from "../../socket";
@@ -72,7 +73,7 @@ const ChatInput = ({
   value,
   inputRef,
 }) => {
-  const [openActions, setOpenActions] = useState(false);
+  const [openActions, setOpenActions] = React.useState(false);
 
   return (
     <StyledInput
@@ -82,7 +83,7 @@ const ChatInput = ({
         setValue(event.target.value);
       }}
       fullWidth
-      placeholder=" Write a message..."
+      placeholder="Write a message..."
       variant="filled"
       InputProps={{
         disableUnderline: true,
@@ -97,7 +98,9 @@ const ChatInput = ({
               {Actions.map((el) => (
                 <Tooltip placement="right" title={el.title}>
                   <Fab
-                    onClick={() => setOpenActions(!openActions)}
+                    onClick={() => {
+                      setOpenActions(!openActions);
+                    }}
                     sx={{
                       position: "absolute",
                       top: -el.y,
@@ -166,7 +169,7 @@ const Footer = () => {
 
   const { sideBar, room_id } = useSelector((state) => state.app);
 
-  const [openPicker, setOpenPicker] = useState(false);
+  const [openPicker, setOpenPicker] = React.useState(false);
 
   const [value, setValue] = useState("");
   const inputRef = useRef(null);
@@ -184,6 +187,7 @@ const Footer = () => {
           value.substring(selectionEnd)
       );
 
+      // Move the cursor to the end of the inserted emoji
       input.selectionStart = input.selectionEnd = selectionStart + 1;
     }
   }
