@@ -31,14 +31,14 @@ const Conversation = ({ isMobile, menu }) => {
   useEffect(() => {
     const current = conversations.find((el) => el.id === room_id);
 
-    socket.emit("get_messages", { conversation_id: current.id }, (data) => {
+    socket.emit("get_messages", { conversation_id: current }, (data) => {
       // data => list of messages
       console.log(data, "List of messages");
       dispatch(FetchCurrentMessages({ messages: data }));
     });
 
     dispatch(SetCurrentConversation(current));
-  }, []);
+  }, [conversations, dispatch, room_id]);
   return (
     <Box p={isMobile ? 1 : 3}>
       <Stack spacing={3}>

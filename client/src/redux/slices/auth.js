@@ -26,7 +26,7 @@ const slice = createSlice({
     logIn(state, action) {
       state.isLoggedIn = action.payload.isLoggedIn;
       state.token = action.payload.token;
-      state.user_id = action.payload.user_id;
+      state.user_id = action.payload._id;
     },
     signOut(state, action) {
       state.isLoggedIn = false;
@@ -143,10 +143,10 @@ export function LoginUser(formValues) {
           slice.actions.logIn({
             isLoggedIn: true,
             token: response.data.token,
-            user_id: response.data.user_id,
+            user_id: response.data._id,
           })
         );
-        window.localStorage.setItem("user_id", response.data.user_id);
+        window.localStorage.setItem("user_id", response.data._id);
         dispatch(
           showSnackbar({ severity: "success", message: response.data.message })
         );

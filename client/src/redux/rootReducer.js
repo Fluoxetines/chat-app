@@ -1,18 +1,15 @@
-import { combineReducers } from 'redux';
-import storage from 'redux-persist/lib/storage';
-// slices
-import appReducer from './slices/app';
-import authReducer from './slices/auth';
-import conversationReducer from './slices/conversation';
+import { combineReducers } from "redux";
+import storage from "redux-persist/lib/storage";
+import appReducer from "./slices/app";
+import authReducer from "./slices/auth";
+import conversationReducer from "./slices/conversation";
 
 // ----------------------------------------------------------------------
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  keyPrefix: 'redux-',
-  //   whitelist: [],
-  //   blacklist: [],
+  keyPrefix: "redux-",
 };
 
 const rootReducer = combineReducers({

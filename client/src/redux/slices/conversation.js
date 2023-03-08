@@ -24,7 +24,7 @@ const slice = createSlice({
         return {
           id: el._id,
           user_id: user._id,
-          name: `${user.firstName} ${user.lastName}`,
+          name: `${user.name}`,
           online: user.status === "Online",
           img: faker.image.avatar(),
           msg: faker.music.songName(),
@@ -49,7 +49,7 @@ const slice = createSlice({
             return {
               id: this_conversation._id._id,
               user_id: user._id,
-              name: `${user.firstName} ${user.lastName}`,
+              name: `${user.name}`,
               online: user.status === "Online",
               img: faker.image.avatar(),
               msg: faker.music.songName(),
@@ -72,7 +72,7 @@ const slice = createSlice({
       state.direct_chat.conversations.push({
         id: this_conversation._id._id,
         user_id: user._id,
-        name: `${user.firstName} ${user.lastName}`,
+        name: `${user.name}`,
         online: user.status === "Online",
         img: faker.image.avatar(),
         msg: faker.music.songName(),
