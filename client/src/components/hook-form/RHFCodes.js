@@ -1,10 +1,6 @@
-
 import { useRef } from "react";
-// form
 import { useFormContext, Controller } from "react-hook-form";
-// @mui
 import { Stack, TextField } from "@mui/material";
-
 
 export default function RHFCodes({ keyName = "", inputs = [], ...other }) {
   const codesRef = useRef(null);
